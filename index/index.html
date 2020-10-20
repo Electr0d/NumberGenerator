@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Number Generator</title>
+        <link rel="stylesheet" type="text/css" href="assets/css/index.css">
+        <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Roboto&display=swap" rel="stylesheet">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    </head>
+    <body>
+        <p class="title">Number Generator</p>
+        <container>
+            <controls class="containerized">
+                <div class="header">Parameters</div>
+                <div class="container" id="minimum">
+                    <p class="label" id="minimum">Select Minimum Value</p>
+                    <input type="range" min="0" max="998" value="1" class="slider" id="minimum">
+                    <div class="parameter-label">    
+                        <p class="value" id="minimum"><-</p>
+                        <input class="value-input" id="minimum" value="1" max="3">
+                    </div>
+                </div>
+                <div class="container" id="maximum">
+                    <p class="label" id="maximum">Select Maximum Value</p>
+                    <input type="range" min="1" max="1000"  value="1" class="slider" id="maximum">
+                    
+                    <div class="parameter-label">    
+                        <p class="value" id="maximum"><-</p>
+                        <input class="value-input" id="maximum" value="1" max="1000">
+                    </div>
+
+                </div>
+                <div class="container" id="frequency">
+                    <p class="label" id="frequency">Select Frequency</p>
+                    <input type="range" min="1" max="250"  value="1" class="slider" id="frequency">
+                    <div class="parameter-label">    
+                        <p class="value" id="frequency"><-</p>
+                        <input class="value-input" id="frequency" value="1" max="250">
+                    </div>
+                </div>
+                <p class="no-error" id="submit-error"></p>
+                <button class="submit" onclick="submitFunc()">Submit</button>
+            </controls>
+                
+            <numbers class="containerized">
+                <p class="header">Generated numbers</p>
+                <div class="output-controls">
+                    <parameters>
+                        <div class="checkbox" id="preserve-log">
+                            <div class="housing"  id="preserve-log" onclick="toggleLog()">
+                                <div class="circle" id="preserve-log"></div>
+                            </div>
+                            <p class="label" id="preserve-log">Preserve Log</p>
+                            </div>
+                            <div class="checkbox" id="unique-numbers">
+                                <div class="housing"  id="unique-numbers"onclick="toggleMatching()">
+                                    <div class="circle"  id="unique-numbers"></div>
+                                </div>
+                                <p class="label">Unique Numbers</p>
+                            </div></parameters>
+                    <button class="clear" onclick="clearLog()">Clear Output</button>
+                </div>
+                    <output>
+                    </output>
+            </numbers>
+        </container>
+        <script src="assets/js/index.js"></script>
+    </body>
+</html>
