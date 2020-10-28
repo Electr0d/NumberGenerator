@@ -1,19 +1,4 @@
-/*
-* By: Hamza Alsarakbi
-* Teacher: Mr. Schwartz
-* How to use this program:
-* ** Set the minimum and maximum value of the number you want
-* ** Set the frequency (how many numbers you want to generate)
-* ** "Preserve Log" doesn't keeps the output when you generate again
-* ** "Unique Numbers" generates unique numbers
-* ** "Clear Output" clears all the generated numbers
-*/
-const // controls
-	fs = require('fs'),
-	path = require('path'),
-	dataPath = path.join(__dirname + '/save/data.json'),
-	configPath = path.join(__dirname + '/save/config.json'),
-	miniDOM = document.querySelector('.slider#minimum'),
+const miniDOM = document.querySelector('.slider#minimum'),
 	maxDOM = document.querySelector('.slider#maximum'),
 	frequencyDOM = document.querySelector('.slider#frequency'),
 	btnSubmit = document.querySelector('.submit'),
@@ -22,45 +7,26 @@ const // controls
 	lblFrequency = document.querySelector('.value-input#frequency'),
 	errorDOM = document.querySelector('#submit-error'),
 	// output
-	output = document.querySelector('output'),
-	// for terminal
-	redColor = 'color: rgb(200, 50, 50)',
-	greenColor = 'color: rgb(50, 200, 50)',
-	orangeColor = 'color: rgb(233, 119, 27)',
-	blueColor = 'color: rgb(150, 200, 255)';
+	output = document.querySelector('output');
 
-var saveOn = false;
-// objects
-var data = {};
-var config = {
-	miniValue: 0,
-	maxValue: 1,
-	frequencyValue: 1,
-	preserveLog: false,
-	uniqueNumbers: false,
-	graphOn: false,
-	outputIndex: 1
-};
+var miniValue = config.parameters.min;
+var maxValue = config.parameters.max;
+var frequencyValue = config.parameters.freq;
 
-/*** LOAD SAVED DATA ***/
-// read saved data
-data = read('data', dataPath);
-config = read('config', configPath);
-console.log(config);
-var miniValue = config.miniValue;
-var maxValue = config.maxValue;
-var frequencyValue = config.frequencyValue;
+
+
+
 // append data object into output
 function init() {
 	// if data object is not empty
 	if (data != {}) {
 		// add output  aka generated numbers to the output panel
 		for (i = 1; i <= config.outputIndex - 1; i++) {
-			var gen = data['index-' + i].value;
+			var gen = data['index_' + i].value;
 			// create gen div
 			var genParent = document.createElement('div');
 			genParent.setAttribute('class', 'gen-parent');
-			genParent.setAttribute('id', 'index-' + i);
+			genParent.setAttribute('id', 'index_' + i);
 			genParent.setAttribute('data-id', gen);
 			genParent.setAttribute('onclick', 'copy(this)');
 			output.appendChild(genParent);
@@ -79,19 +45,25 @@ function init() {
 			genDOM.textContent = gen;
 			genParent.appendChild(genDOM);
 			output.scrollTop = output.scrollHeight;
-			console.log('%c NOTICE: Appending ' + data['index-' + i].value + ' at index ' + i, blueColor);
+			console.log('%c NOTICE: Appending ' + data['index_' + i].value + ' at index ' + i, terminal.blueColor);
 		}
 	}
-	if (config.preserveLog) {
+	if (config.settings.preserveLog) {
 		// if preserve log parameter is on
 		toggleLog();
 		toggleLog();
 	}
-	if (config.uniqueNumbers) {
+	if (config.settings.uniqueNumbers) {
 		// if unique numbers parameter is on
 		toggleMatching();
 		toggleMatching();
 	}
+	miniDOM.value = config.parameters.min;
+	lblMini.value = config.parameters.min;
+	maxDOM.value = config.parameters.max;
+	lblMax.value = config.parameters.max;
+	frequencyDOM.value = config.parameters.freq;
+	lblFrequency.value = config.parameters.freq;
 }
 init();
 // change value everytime the sliders are changed
@@ -100,7 +72,7 @@ init();
 // execute this code when you detect changes to the controls
 miniDOM.addEventListener('input', function() {
 	// reassign variables
-	config.miniValue = Number(miniDOM.value);
+	config.parameters.min = Number(miniDOM.value);
 	// update the number on screen
 	lblMini.value = miniDOM.value;
 	/****
@@ -109,7 +81,7 @@ miniDOM.addEventListener('input', function() {
 	 * * if the frequency value (how many numbers to generate) is bigger than the difference of the maximum and minimum value
 	 * * * because you can't generate more than 5 unique numbers between 1 and 5
 	*/
-	if (config.uniqueNumbers && config.frequencyValue > config.maxValue - config.miniValue) {
+	if (config.settings.uniqueNumbers && config.parameters.freq > config.parameters.max - config.parameters.min) {
 		errorTrigger('Cannot generate unique numbers given the range.');
 	} else {
 		resetError();
@@ -130,7 +102,7 @@ lblMini.addEventListener('input', function() {
 		// also check if the value is a number only
 	} else if (syntaxChecker(lblMini.value)) {
 		resetError();
-		config.miniValue = Number(lblMini.value);
+		config.parameters.min = Number(lblMini.value);
 		miniDOM.value = lblMini.value;
 		errorChecker();
 	} else {
@@ -140,7 +112,7 @@ lblMini.addEventListener('input', function() {
 
 // maximum value checker
 maxDOM.addEventListener('input', function() {
-	config.maxValue = Number(maxDOM.value);
+	config.parameters.max = Number(maxDOM.value);
 	lblMax.value = maxDOM.value;
 	errorChecker();
 });
@@ -156,7 +128,7 @@ lblMax.addEventListener('input', function() {
 		errorTrigger('Maxmimum value greater than 1000.');
 	} else if (syntaxChecker(lblMax.value)) {
 		resetError();
-		config.maxValue = Number(lblMax.value);
+		config.parameters.max = Number(lblMax.value);
 		maxDOM.value = lblMax.value;
 		errorChecker();
 	} else {
@@ -166,7 +138,7 @@ lblMax.addEventListener('input', function() {
 
 // frequency checker
 frequencyDOM.addEventListener('input', function() {
-	config.frequencyValue = Number(frequencyDOM.value);
+	config.parameters.freq = Number(frequencyDOM.value);
 	lblFrequency.value = frequencyDOM.value;
 	errorChecker();
 });
@@ -179,7 +151,7 @@ lblFrequency.addEventListener('input', function() {
 		errorTrigger('Frequency value cannot be greater than 250.');
 	} else if (syntaxChecker(lblFrequency.value)) {
 		resetError();
-		config.frequencyValue = Number(lblFrequency.value);
+		config.parameters.freq = Number(lblFrequency.value);
 		frequencyDOM.value = lblFrequency.value;
 		errorChecker();
 	} else {
@@ -194,9 +166,12 @@ function syntaxChecker(int) {
 }
 function errorChecker() {
 	// check if the max value is smaller than minimum value
-	if (config.maxValue < config.miniValue) {
+	if (config.parameters.max < config.parameters.min) {
 		errorTrigger('Minimum value cannot be higher than Maximum value.');
-	} else if (config.uniqueNumbers && config.frequencyValue > config.maxValue - config.miniValue + 1) {
+	} else if (
+		config.settings.uniqueNumbers &&
+		config.parameters.freq > config.parameters.max - config.parameters.min + 1
+	) {
 		errorTrigger('Cannot generate unique numbers given the range.');
 	} else {
 		// reset error
@@ -218,12 +193,12 @@ function errorTrigger(msg) {
 
 function submitFunc() {
 	// check if max value is bigger than minimum value
-	if (!onCopy && config.maxValue > config.miniValue) {
+	if (!onCopy && config.parameters.max > config.parameters.min) {
 		// check if preserve log is false
-		if (!config.preserveLog) {
+		if (!config.settings.preserveLog) {
 			clearLog();
 		}
-		for (i = 1; i <= config.frequencyValue; i++) {
+		for (i = 1; i <= config.parameters.freq; i++) {
 			// generate number
 			generate();
 		}
@@ -233,8 +208,8 @@ function submitFunc() {
 }
 
 function generate() {
-	var gen = genFunc(config.miniValue, config.maxValue);
-	if (config.uniqueNumbers) {
+	var gen = genFunc(config.parameters.min, config.parameters.max);
+	if (config.settings.uniqueNumbers) {
 		var duplicates = checkDuplicates(gen);
 		if (!duplicates) {
 			appendValue(gen, true);
@@ -253,7 +228,7 @@ function checkDuplicates(gen) {
 	gen = Number(gen);
 	var duplicates = false;
 	for (i = 1; i < config.outputIndex; i++) {
-		if (gen == data['index-' + i].value) {
+		if (gen == data['index_' + i].value) {
 			duplicates = true;
 		}
 	}
@@ -263,7 +238,7 @@ function checkDuplicates(gen) {
 function appendValue(gen, appendData) {
 	if (appendData) {
 		// add data to object
-		data['index-' + config.outputIndex] = {
+		data['index_' + config.outputIndex] = {
 			value: gen,
 			index: config.outputIndex
 		};
@@ -272,7 +247,7 @@ function appendValue(gen, appendData) {
 	// create gen div
 	var genParent = document.createElement('div');
 	genParent.setAttribute('class', 'gen-parent');
-	genParent.setAttribute('id', 'index-' + config.outputIndex);
+	genParent.setAttribute('id', 'index_' + config.outputIndex);
 	genParent.setAttribute('data-id', gen);
 	genParent.setAttribute('onclick', 'copy(this)');
 	output.appendChild(genParent);
@@ -293,6 +268,7 @@ function appendValue(gen, appendData) {
 	genParent.appendChild(genDOM);
 	output.scrollTop = output.scrollHeight;
 }
+
 var onCopy = false;
 function copy(num) {
 	if (!onCopy) {
@@ -326,9 +302,9 @@ function copy(num) {
 		document.body.removeChild(copyInput);
 		// display result
 		if (copied) {
-			console.log('%c NOTICE: Copied ' + data[id].value + ' to clipboard!', greenColor);
+			console.log('%c NOTICE: Copied ' + data[id].value + ' to clipboard!', terminal.green);
 		} else {
-			console.log('%c ERROR: Failed to copy ' + data[id].value + ' to clipboard!', redColor);
+			console.log('%c ERROR: Failed to copy ' + data[id].value + ' to clipboard!', terminal.redColor);
 		}
 		// show that output was copied
 		var copyMessage = document.createElement('span');
@@ -349,14 +325,14 @@ function toggleLog() {
 	// if preserved log is false
 	var housing = document.querySelector('.housing#preserve-log');
 	var circle = document.querySelector('.circle#preserve-log');
-	if (!config.preserveLog) {
-		config.preserveLog = true;
+	if (!config.settings.preserveLog) {
+		config.settings.preserveLog = true;
 		toggleCheckbox('on', housing, circle);
-		if (config.uniqueNumbers) {
+		if (config.settings.uniqueNumbers) {
 			toggleMatching();
 		}
 	} else {
-		config.preserveLog = false;
+		config.settings.preserveLog = false;
 		toggleCheckbox('off', housing, circle);
 	}
 }
@@ -377,24 +353,24 @@ function toggleCheckbox(action, housing, circle) {
 function toggleMatching() {
 	var housing = document.querySelector('.housing#unique-numbers');
 	var circle = document.querySelector('.circle#unique-numbers');
-	if (!config.uniqueNumbers) {
+	if (!config.settings.uniqueNumbers) {
 		// if it is impossible to create unique numebers
-		if (config.frequencyValue > config.maxValue - config.miniValue + 1) {
+		if (config.parameters.freq > config.parameters.max - config.parameters.min + 1) {
 			// don't do anything
 		} else {
 			// turn unique numbers button on
-			config.uniqueNumbers = true;
+			config.settings.uniqueNumbers = true;
 			toggleCheckbox('on', housing, circle);
 			// if preserve button is already on, then turn it off
-			if (config.preserveLog) {
+			if (config.settings.preserveLog) {
 				toggleLog();
 			}
 		}
-	} else if (config.uniqueNumbers) {
-		config.uniqueNumbers = false;
+	} else if (config.settings.uniqueNumbers) {
+		config.settings.uniqueNumbers = false;
 		toggleCheckbox('off', housing, circle);
 		// if error is already triggered
-		if (config.frequencyValue > config.maxValue - config.miniValue + 1) {
+		if (config.parameters.freq > config.parameters.max - config.parameters.min + 1) {
 			resetError();
 		}
 		errorChecker();
@@ -406,156 +382,10 @@ function clearLog() {
 	} else {
 		// clear output/log
 		output.innerHTML = '';
-		console.log('%c NOTICE: Output cleared!', greenColor);
+		console.log('%c NOTICE: Output cleared!', terminal.green);
 		// clear data object
 		data = {};
 		// reset data header
 		config.outputIndex = 1;
 	}
 }
-
-// Animations
-var iMax = 0;
-iMaxFunc();
-function iMaxFunc() {
-	if (iMax < maxValue) {
-		iMax++;
-		maxDOM.setAttribute('value', iMax);
-		config.maxValue = Number(maxDOM.value);
-		lblMax.value = maxDOM.value;
-		setTimeout(function() {
-			iMaxFunc();
-		}, 2);
-	}
-}
-var iMin = 0;
-iMinFunc();
-function iMinFunc() {
-	if (iMin < miniValue) {
-		iMin++;
-		miniDOM.setAttribute('value', iMin);
-		config.miniValue = Number(miniDOM.value);
-		lblMini.value = miniDOM.value;
-		setTimeout(function() {
-			iMinFunc();
-		}, 2);
-	}
-}
-var iFreq = 0;
-iFreqFunc();
-function iFreqFunc() {
-	if (iFreq < frequencyValue) {
-		iFreq++;
-		frequencyDOM.setAttribute('value', iFreq);
-		config.frequencyValue = Number(frequencyDOM.value);
-		lblFrequency.value = frequencyDOM.value;
-		setTimeout(function() {
-			iFreqFunc();
-		}, 2);
-	}
-}
-
-/** Save output and parameters to an external file **/
-function save(action, object, path) {
-	switch (action) {
-		case 'show':
-			// show save button
-			// create save button
-			var saveBtn = document.createElement('button');
-			saveBtn.setAttribute('class', 'save');
-			saveBtn.setAttribute('onclick', "save('all')");
-			saveBtn.textContent = 'Save';
-			document.body.appendChild(saveBtn);
-			break;
-		case 'hide':
-			// hide save button
-			var saveBtn = document.querySelector('.save');
-			saveBtn.classList.add('save-out');
-
-			setTimeout(function() {
-				document.body.removeChild(saveBtn);
-			}, 310);
-
-			break;
-		case 'save':
-			// save file
-			var objectStringified = stringify(object);
-			package(objectStringified, path);
-			console.table(object);
-			break;
-		case 'all':
-			// hide save button
-			save('hide');
-			save('save', data, dataPath);
-			save('save', config, configPath);
-			saveOn = false;
-			break;
-		default:
-			console.log('%c ERROR: action: "' + action + '" is not valid', redColor);
-	}
-}
-
-function stringify(object) {
-	return JSON.stringify(object);
-}
-function package(object, path) {
-	fs.writeFile(path, object, (err) => {
-		if (err) throw err;
-		console.log('%c Object has been saved!', greenColor);
-	});
-}
-function read(object, path) {
-	var rawObject = readFunc(path);
-	return parse(rawObject);
-}
-function readFunc(path) {
-	var raw = fs.readFileSync(path);
-	return raw;
-}
-
-function parse(object) {
-	return JSON.parse(object);
-}
-
-// this function is used to compare the two objects
-function autoSavePrep(object) {
-	var objPath;
-	switch (object) {
-		case 'data':
-			objPath = dataPath;
-			break;
-		case 'config':
-			objPath = configPath;
-			break;
-		default:
-			console.log('object name invalid');
-	}
-	var rawObject = readFunc(objPath);
-	var parsedObject = parse(rawObject);
-	return stringify(parsedObject);
-}
-
-// check if either of the two object is changed paramters changed, new generated numbers, etc.
-function autoSave() {
-	var currentData = stringify(data);
-	var savedData = autoSavePrep('data');
-	var currentConfig = stringify(config);
-	var savedConfig = autoSavePrep('config');
-
-	if (currentData != savedData || currentConfig != savedConfig) {
-		if (!saveOn) {
-			saveOn = true;
-			save('show');
-		}
-	} else {
-		if (saveOn) {
-			save('hide');
-			saveOn = false;
-		}
-	}
-}
-
-// trigger the auto save every two seconds
-setTimeout(function() {
-	setInterval(autoSave, 400);
-}, 2000);

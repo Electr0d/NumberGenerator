@@ -1,19 +1,18 @@
 {
-  "name": "lotto",
+  "name": "NumGen",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "description": "A number generator program.",
+  "main": "index.js",
   "scripts": {
     "start": "electron ."
   },
-  "author": "Hamza",
+  "author": "Hamza Alsarakbi",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^8.1.0"
+    "electron": "^8.5.2"
   },
   "dependencies": {
     "fs": "0.0.1-security",
-    "path": "^0.12.7",
-    "require.js": "^1.0.0"
+    "path": "^0.12.7"
   }
 }

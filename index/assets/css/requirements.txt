@@ -1,1 +1,0 @@
-chart/counter of how many times a number has been generated

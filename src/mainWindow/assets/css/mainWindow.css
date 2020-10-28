@@ -131,7 +131,8 @@ output {
 
 *::-webkit-scrollbar {
 	width: 10px;
-	background: rgb(60, 60, 60);
+	border: 1px solid rgb(60, 60, 60);
+	background: rgb(20, 20, 20);
 	border-radius: 10px;
 }
 *::-webkit-scrollbar-thumb {
