@@ -193,19 +193,18 @@ button.clear {
 	background: rgb(67, 86, 196);
 	cursor: pointer;
 }
-.no-error {
-	color: rgb(250, 60, 60);
+p.no-error {
 	opacity: 0;
-	font-size: 14px;
 	height: 0;
 }
 .error {
-	opacity: 1;
 	height: 34px;
+	color: rgb(250, 60, 60);
+	font-size: 14px;
+	opacity: 1;
 }
 .disabled {
 	opacity: 0;
-	transform: translateY(100%);
 }
 
 .value,
@@ -237,6 +236,9 @@ input:focus {
 	border: 1px solid lightgray;
 	border-radius: 15px;
 }
+.circle-active {
+	transform: translateX(100%);
+}
 parameters {
 	display: flex;
 	flex-direction: column;
@@ -261,7 +263,7 @@ parameters {
 .housing:hover {
 	cursor: pointer;
 }
-.housing-green {
+.housing-active {
 	background-color: rgb(1, 161, 36);
 	border-color: lightgrey;
 }

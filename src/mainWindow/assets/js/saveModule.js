@@ -1,9 +1,36 @@
 const fs = require('fs')
 const path = require('path');
+const isDev = require('electron-is-dev');
+function getUserHome() {
+	return process.env[process.platform == 'win32' ? 'USERPROFILE' : 'HOME'];
+}
+if (isDev) {
+	parentDir = path.join(getUserHome(), '/AppData/Local/NumberatorDev');
+} else {
+	// production mode
+	parentDir = path.join(getUserHome(), '/AppData/Local/Numberator');
+}
+
+if (!fs.existsSync(parentDir)) {
+	console.log("Parent directory doesn't exist");
+	fs.mkdirSync(parentDir);
+}
 
 
-const dataPath = path.join(__dirname + '../../save/data.json');
-const configPath = path.join(__dirname + '../../save/config.json');
+const dataPath = path.join(parentDir + '/data.json');
+const configPath = path.join(parentDir + '/config.json');
+
+
+
+
+
+
+
+
+
+
+
+
 
 var saveOn = false;
 // objects
@@ -32,10 +59,9 @@ const terminal = {
 
 /*** LOAD SAVED DATA ***/
 // read saved data
-data = unpack(dataPath);
-config = unpack(configPath);
-console.log(config);
-
+data = unpack(dataPath, data);
+config = unpack(configPath, config);
+console.log(config.parameters);
 
 function pack(object, path) {
 	fs.writeFile(path, JSON.stringify(object), (err) => {
@@ -43,8 +69,15 @@ function pack(object, path) {
 		console.log('%c Object has been saved!', terminal.green);
 	});
 }
-function unpack(path) {
-	return JSON.parse(fs.readFileSync(path));
+function unpack(path, object) {
+	try {
+		return JSON.parse(fs.readFileSync(path));
+	} catch (err) {
+		console.log('ERROR: object doesn\'t exist.')
+		pack(data, dataPath);
+		pack(config, configPath);
+		return object;
+	}
 }
 
 
@@ -116,4 +149,4 @@ function save(action, object, path) {
 	}
 }
 
-
+console.log(config.parameters.freq);
