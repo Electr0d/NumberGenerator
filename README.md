@@ -44,9 +44,6 @@ When making changes, you will be prompted with a save button. To confirm your ch
 
 Parameters set and output are saved locally on your device.
 
-## Use case
+## Use Case
 
-There are many use cases for this program, this is one I use personally:
-
-When practicing textbook questions, I set the minimum value to 1, maximum value to the final question and frequency value to how many questions I want to do, then generate.
-I would highlight the question I am doing so that I keep track. When I am done, I highlight the next row.
+There are many use cases for this program. I personally use this program when practicing textbook questions. I set the minimum value to 1, maximum value to the final question and frequency value to how many questions I want to do, then generate. I would highlight the question I am doing so that I keep track. When I am done, I highlight the next row.
