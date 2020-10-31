@@ -59,7 +59,6 @@ function loadData() {
 	e.parameters.freq.input.value = config.parameters.freq;
 }
 loadData();
-console.log(config.parameters.freq);
 
 // change value everytime the sliders are changed
 
@@ -110,12 +109,12 @@ function syntaxChecker(int) {
 
 function errorChecker(inputName, object, min, max, type) {
 		// check if the max value is smaller than minimum value
-		if (config.parameters.max < config.parameters.min) {
-			errorTrigger(inputName + ' value cannot be higher than Maximum value.');
+		if (Number(e.parameters.max[type].value) < Number(e.parameters.min[type].value)) {
+			errorTrigger('Minimum value cannot be higher than Maximum value.');
 		} else if (config.settings.uniqueNumbers) {
 			
 			// check if frequency number is higher than the difference if UniqueNumbers is true
-			if(config.parameters.freq > config.parameters.max - config.parameters.min + 1) {
+			if(Number(e.parameters.freq[type].value) > Number(e.parameters.max[type].value) - Number(e.parameters.min[type].value) + 1) {
 				errorTrigger('Cannot generate unique numbers given the range.');
 			} else {
 				resetError();
@@ -132,11 +131,11 @@ function errorChecker(inputName, object, min, max, type) {
 
 			// nor smaller than minimum allowed
 		} else if (e.parameters[object].input.value < min) {
-			errorTrigger(inputName + ' value smaller than ' + min + '.');
+			errorTrigger(inputName + ' value cannot be smaller than ' + min + '.');
 
 			// nor bigger than maximum allowed
 		} else if (e.parameters[object].input.value > max) {
-			errorTrigger(inputName + ' value greater than ' + max + '.');
+			errorTrigger(inputName + ' value cannot be greater than ' + max + '.');
 
 			// also check if the value is a number only
 		} else if (syntaxChecker(e.parameters[object].input.value)) {
@@ -228,12 +227,13 @@ function appendValue(gen, index, appendData) {
 	genParent.setAttribute('id', 'index_' + index);
 	genParent.setAttribute('data-id', gen);
 	genParent.setAttribute('onclick', 'copy(this)');
+	genParent.addEventListener('contextmenu', genParentFocus);
 	e.output.appendChild(genParent);
 
 	// create prefix
 	var genPrefix = document.createElement('span');
-	genPrefix.setAttribute('class', 'output-msg');
-	genPrefix.textContent = index + '. ->';
+	genPrefix.setAttribute('class', 'output-msg output-prefix');
+	genPrefix.textContent = index + '.-> ';
 	genPrefix.style = 'user-select: none';
 	genParent.appendChild(genPrefix);
 
@@ -254,11 +254,23 @@ function appendValue(gen, index, appendData) {
 	}
 	e.output.scrollTop = e.output.scrollHeight;
 }
+function genParentFocus(e) {
+	let id = e.target.id;
+	let classList = e.target.classList[0];
+	if(classList == 'gen-parent') {
 
+		let query = '.' + classList + '#' + id;
+		// clear focus on all gen-parents
+		for (i = 0; i < document.getElementsByClassName(classList).length; i++) {
+			document.getElementsByClassName(classList)[i].classList.remove('gen-parent-focus');
+		}
+		document.querySelector(query).classList.add('gen-parent-focus');
+	}
+}
 function copy(e) {
 	// fetch class and id of HTML element
 	let id = e.id;
-	let classList = e.classList;
+	let classList = e.classList[0];
 	// put them together into a query
 	let query = '.' + classList + '#' + id;
 
@@ -294,6 +306,7 @@ function copy(e) {
 		setTimeout(() => {
 			document.querySelector(query).removeChild(copyMessage);
 		}, 200);
+		document.querySelector(query).classList.remove('gen-parent-focus');
 	}, 1000);
 	
 }
@@ -315,12 +328,12 @@ function toggleLog() {
 function toggleSwitch(action, component) {
 	if (action == 'on') {
 		// css effects
-		component.housing.classList.add('housing-active');
-		component.circle.classList.add('circle-active');
+		component.housing.classList.add('active');
+		component.circle.classList.add('active');
 	} else if (action == 'off') {
 		// css effects
-		component.housing.classList.remove('housing-active');
-		component.circle.classList.remove('circle-active');
+		component.housing.classList.remove('active');
+		component.circle.classList.remove('active');
 	}
 }
 

@@ -22,16 +22,6 @@ const configPath = path.join(parentDir + '/config.json');
 
 
 
-
-
-
-
-
-
-
-
-
-
 var saveOn = false;
 // objects
 var data = {};
@@ -61,7 +51,7 @@ const terminal = {
 // read saved data
 data = unpack(dataPath, data);
 config = unpack(configPath, config);
-console.log(config.parameters);
+
 
 function pack(object, path) {
 	fs.writeFile(path, JSON.stringify(object), (err) => {
@@ -148,5 +138,3 @@ function save(action, object, path) {
 			console.log('%c ERROR: action: "' + action + '" is not valid', termina.red);
 	}
 }
-
-console.log(config.parameters.freq);

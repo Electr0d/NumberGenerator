@@ -3,69 +3,106 @@
 
 <head>
     <title>Number Generator</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/darkTheme.css">
     <link rel="stylesheet" type="text/css" href="assets/css/mainWindow.css">
+    <link rel="stylesheet" type="text/css" href="../global_assets/windowBar.css">
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono|Roboto&display=swap" rel="stylesheet">
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
 <body>
-    <p class="title">Number Generator</p>
-    <container>
-        <controls class="containerized">
-            <div class="header">Parameters</div>
-            <div class="item" id="minimum">
-                <p class="label" id="minimum">Select Minimum Value</p>
-                <input type="range" min="0" max="998" value="1" class="slider" id="minimum">
-                <div class="parameter-label">
-                    <p class="value" id="minimum">
-                        <-</p> <input class="value-input" id="minimum" value="1" max="3">
+
+    <!-- Window Controls -->
+    <header id="titlebar">
+        <div id="drag-region">
+            <div id="window-title">
+                <img src="../global_assets/icon/icon.png" height="20px">
+                <span style="padding-left: 10px;">Number Generator</span>
+            </div>
+
+            <div id="window-controls">
+                <div class="button" id="min-button">
+                    <img src="../global_assets/window_icons/minimize.png" class="window-icon">
+                </div>
+                <div class="button" id="max-button">
+                    <img src="../global_assets/window_icons/maximize.png" class="window-icon">
+                </div>
+                <div class="button" id="restore-button">
+                    <img src="../global_assets/window_icons/restore.png" class="window-icon">
+                </div>
+                <div class="button" id="close-button">
+                    <img src="../global_assets/window_icons/close.png" class="window-icon">
                 </div>
             </div>
-            <div class="item" id="maximum">
-                <p class="label" id="maximum">Select Maximum Value</p>
-                <input type="range" min="1" max="1000" value="1" class="slider" id="maximum">
+        </div>
+    </header>
 
-                <div class="parameter-label">
-                    <p class="value" id="maximum">
-                        <-</p> <input class="value-input" id="maximum" value="1" max="1000">
-                </div>
 
-            </div>
-            <div class="item" id="frequency">
-                <p class="label" id="frequency">Select Frequency</p>
-                <input type="range" min="1" max="250" value="1" class="slider" id="frequency">
-                <div class="parameter-label">
-                    <p class="value" id="frequency">
-                        <-</p> <input class="value-input" id="frequency" value="1" max="250">
-                </div>
-            </div>
-            <p class="error no-error" id="submit-error"></p>
-            <button class="submit" onclick="submit()">Submit</button>
-        </controls>
 
-        <numbers class="containerized">
-            <p class="header">Generated numbers</p>
-            <div class="output-controls">
-                <parameters>
-                    <div class="checkbox" id="preserve-log">
-                        <div class="housing" id="preserve-log" onclick="toggleLog()">
-                            <div class="circle" id="preserve-log"></div>
+    <div class="app">
+
+        <div class="title">Number Generator</div>
+        <container>
+            <card class="containerized controls">
+                <div class="header">Parameters</div>
+                <div class="body">
+
+                    <div class="item" id="minimum">
+                        <p class="label" id="minimum">Select Minimum Value</p>
+
+                        <input type="range" min="0" max="998" value="1" class="slider" id="minimum">
+                        <div class="parameter-label">
+                            <p class="value" id="minimum">
+                                <-<input class="value-input" id="minimum" value="1" max="3">
                         </div>
-                        <p class="label" id="preserve-log">Preserve Log</p>
                     </div>
-                    <div class="checkbox" id="unique-numbers">
-                        <div class="housing" id="unique-numbers" onclick="toggleMatching()">
-                            <div class="circle" id="unique-numbers"></div>
+                    <div class="item" id="maximum">
+                        <p class="label" id="maximum">Select Maximum Value</p>
+                        <input type="range" min="1" max="1000" value="1" class="slider" id="maximum">
+
+                        <div class="parameter-label">
+                            <p class="value" id="maximum">
+                                <-<input class="value-input" id="maximum" value="1" max="1000">
                         </div>
-                        <p class="label">Unique Numbers</p>
+
                     </div>
-                </parameters>
-                <button class="clear" onclick="clearLog()">Clear Output</button>
-            </div>
-            <output>
-            </output>
-        </numbers>
-    </container>
+                    <div class="item" id="frequency">
+                        <p class="label" id="frequency">Select Frequency</p>
+                        <input type="range" min="1" max="250" value="1" class="slider" id="frequency">
+                        <div class="parameter-label">
+                            <p class="value" id="frequency">
+                                <-<input class="value-input" id="frequency" value="1" max="250">
+                        </div>
+                    </div>
+                    <div class="error no-error" id="submit-error"></div>
+                    <button class="submit" onclick="submit()">Generate</button>
+                </div>
+            </card>
+
+            <card class="containerized numbers">
+                <div class="header">Generated numbers</div>
+                <div class="body output-controls">
+                    <parameters>
+                        <div class="checkbox" id="preserve-log">
+                            <div class="housing" id="preserve-log" onclick="toggleLog()">
+                                <div class="circle" id="preserve-log"></div>
+                            </div>
+                            <p class="label" id="preserve-log">Preserve Log</p>
+                        </div>
+                        <div class="checkbox" id="unique-numbers">
+                            <div class="housing" id="unique-numbers" onclick="toggleMatching()">
+                                <div class="circle" id="unique-numbers"></div>
+                            </div>
+                            <p class="label">Unique Numbers</p>
+                        </div>
+                    </parameters>
+                    <button class="clear" onclick="clearLog()">Clear Output</button>
+                </div>
+                <output>
+                </output>
+            </card>
+        </container>
+    </div>
+    <script src="../global_assets/js/windowControls.js"></script>
     <script src="assets/js/saveModule.js"></script>
     <script src="assets/js/mainWindow.js"></script>
 </body>

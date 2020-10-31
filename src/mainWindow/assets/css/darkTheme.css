@@ -1,0 +1,25 @@
+:root {
+  --primary-accent: rgb(105, 122, 219);
+  --secondary-accent: rgb(30, 30, 30);
+  --tertiary-accent: #E0A61F;
+
+  --primary-card: var(--secondary-accent);
+
+
+  --primary-background: rgb(20, 20, 20);
+  --primary-color: rgb(200, 200, 200);
+
+  --primary-shadow: rgb(37, 37, 37);
+
+  --important: rgb(200, 50, 50);
+
+  --primary-slider: rgb(50, 50, 50);
+
+  --primary-switch: rgb(50, 50, 50);
+
+  --primary-output: rgb(31, 33, 44);
+  --secondary-output: rgb(35, 38, 50);
+  --tertiary-output: rgb(34, 36, 49);
+
+  --primary-hover: rgb(60, 60, 60);
+}
